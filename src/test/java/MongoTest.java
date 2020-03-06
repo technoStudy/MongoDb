@@ -1,7 +1,4 @@
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import org.bson.Document;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -26,5 +23,15 @@ public class MongoTest {
         MongoCollection<Document> collection = database.getCollection("school_city");
         Document actual = collection.find().first();
         System.out.println(actual);
+    }
+
+    @Test
+    public void findAll() {
+        MongoCollection<Document> collection = database.getCollection("school_city");
+        MongoCursor<Document> cursor = collection.find().iterator();
+        while (cursor.hasNext()) {
+            System.out.println(cursor.next());
+        }
+        cursor.close();
     }
 }
