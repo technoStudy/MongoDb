@@ -1,5 +1,6 @@
 import com.mongodb.client.*;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -63,7 +64,7 @@ public class MongoTest {
     }
 
     @Test
-    public void findStundesInSection() {
+    public void findStudentsInSection() {
         MongoCollection<Document> collection = database.getCollection( "school_student" );
         long count = collection.countDocuments(or(
                 eq( "section", "1305000" ),
@@ -76,5 +77,14 @@ public class MongoTest {
         long alternativeCount = collection.countDocuments(in("section", sections));
 
         Assert.assertEquals( count, alternativeCount );
+    }
+
+    @Test
+    public void findStudentById() {
+        MongoCollection<Document> collection = database.getCollection( "school_student" );
+        Document student = collection.find(
+                new Document( "_id", new ObjectId( "5c6bf3fdead76c69888c98e9" ) )
+        ).first();
+        System.out.println(student);
     }
 }
