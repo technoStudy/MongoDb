@@ -86,5 +86,7 @@ public class MongoTest {
                 new Document( "_id", new ObjectId( "5c6bf3fdead76c69888c98e9" ) )
         ).first();
         System.out.println(student);
+        // get field
+        System.out.println(student.get( "section" ));
     }
 }
