@@ -43,4 +43,19 @@ public class MongoTest {
         Document actual = collection.find(eq("name", "Newyork")).first();
         System.out.println(actual);
     }
+
+    @Test
+    public void findAllUsingFilter() {
+        MongoCollection<Document> collection = database.getCollection( "school_city" );
+        MongoCursor<Document> cursor = collection.find(
+                and(
+                        eq( "name", "Newyork" ),
+                        eq( "deleted", true )
+                )
+        ).iterator();
+        while(cursor.hasNext()) {
+            System.out.println( cursor.next() );
+        }
+        cursor.close();
+    }
 }
