@@ -3,6 +3,8 @@ import org.bson.Document;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import static com.mongodb.client.model.Filters.*;
+
 public class MongoTest {
     private MongoDatabase database;
 
@@ -33,5 +35,12 @@ public class MongoTest {
             System.out.println(cursor.next());
         }
         cursor.close();
+    }
+
+    @Test
+    public void findOneUsingFilter() {
+        MongoCollection<Document> collection = database.getCollection("school_city");
+        Document actual = collection.find(eq("name", "Newyork")).first();
+        System.out.println(actual);
     }
 }
