@@ -1,7 +1,10 @@
 import com.mongodb.client.*;
 import org.bson.Document;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
 
 import static com.mongodb.client.model.Filters.*;
 
@@ -57,5 +60,21 @@ public class MongoTest {
             System.out.println( cursor.next() );
         }
         cursor.close();
+    }
+
+    @Test
+    public void findStundesInSection() {
+        MongoCollection<Document> collection = database.getCollection( "school_student" );
+        long count = collection.countDocuments(or(
+                eq( "section", "1305000" ),
+                eq("section", "0111000")
+        ));
+        System.out.println(count);
+        ArrayList<String> sections = new ArrayList<String>();
+        sections.add( "1305000" );
+        sections.add( "0111000" );
+        long alternativeCount = collection.countDocuments(in("section", sections));
+
+        Assert.assertEquals( count, alternativeCount );
     }
 }
