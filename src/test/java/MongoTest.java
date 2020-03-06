@@ -20,4 +20,11 @@ public class MongoTest {
         MongoCollection<Document> collection = database.getCollection("school_city");
         System.out.println(collection.countDocuments());
     }
+
+    @Test
+    public void findOne() {
+        MongoCollection<Document> collection = database.getCollection("school_city");
+        Document actual = collection.find().first();
+        System.out.println(actual);
+    }
 }
