@@ -1,3 +1,4 @@
+import com.mongodb.DBRef;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -77,12 +78,12 @@ public class BankAccountTest extends BaseTest {
 
     @Test
     public void editTest() {
-        BankAccount entity = getBody();
+        BankAccount model = getBody();
 
-        // creating entity
+        // creating model
         String entityId = given()
                 .cookies( cookies )
-                .body( entity )
+                .body( model )
                 .contentType( ContentType.JSON )
                 .when()
                 .log().body()
@@ -92,13 +93,13 @@ public class BankAccountTest extends BaseTest {
                 .statusCode( 201 )
                 .extract().jsonPath().getString( "id" );
 
-        // Editing entity
-        entity.setId( entityId );
-        entity.setName( nameEdited );
-        entity.setIban( codeEdited );
+        // Editing model
+        model.setId( entityId );
+        model.setName( nameEdited );
+        model.setIban( codeEdited );
         given()
                 .cookies( cookies )
-                .body( entity )
+                .body( model )
                 .contentType( ContentType.JSON )
                 .when()
                 .log().body()
@@ -106,11 +107,19 @@ public class BankAccountTest extends BaseTest {
                 .then()
                 .log().body()
                 .statusCode( 200 )
-                .body( "name", equalTo( entity.getName() ) )
-                .body( "iban", equalTo( entity.getIban() ) )
+                .body( "name", equalTo( model.getName() ) )
+                .body( "iban", equalTo( model.getIban() ) )
         ;
+        // get model from db by id
+        MongoCollection<Document> collection = database.getCollection( "school_bank_account" );
+        Document entity = collection.find(
+                new Document( "_id", new ObjectId( entityId ) )
+        ).first();
+        // check that name and code is edited correctly
+        Assert.assertEquals(entity.get( "name" ), model.getName());
+        Assert.assertEquals(entity.get( "iban" ), model.getIban());
 
-        // deleting entity
+        // deleting model
         given()
                 .cookies( cookies )
                 .when()
