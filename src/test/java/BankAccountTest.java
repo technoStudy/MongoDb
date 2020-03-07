@@ -41,10 +41,7 @@ public class BankAccountTest extends BaseTest {
                 .statusCode( 201 )
                 .extract().jsonPath().getString( "id" );
 
-        MongoCollection<Document> collection = database.getCollection( "school_bank_account" );
-        Document entity = collection.find(
-                new Document( "_id", new ObjectId( entityId ) )
-        ).first();
+        Document entity = getEntityById( entityId );
         System.out.println(entity);
         Assert.assertNotNull(entity);
         // compare the fields
@@ -111,10 +108,8 @@ public class BankAccountTest extends BaseTest {
                 .body( "iban", equalTo( model.getIban() ) )
         ;
         // get model from db by id
-        MongoCollection<Document> collection = database.getCollection( "school_bank_account" );
-        Document entity = collection.find(
-                new Document( "_id", new ObjectId( entityId ) )
-        ).first();
+        Document entity = getEntityById( entityId );
+
         // check that name and code is edited correctly
         Assert.assertEquals(entity.get( "name" ), model.getName());
         Assert.assertEquals(entity.get( "iban" ), model.getIban());
@@ -211,4 +206,12 @@ public class BankAccountTest extends BaseTest {
                 .statusCode( 404 )
         ;
     }
+
+    private Document getEntityById(String entityId) {
+        MongoCollection<Document> collection = database.getCollection( "school_bank_account" );
+        return collection.find(
+                new Document( "_id", new ObjectId( entityId ) )
+        ).first();
+    }
+
 }
