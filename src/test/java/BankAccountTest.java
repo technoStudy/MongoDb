@@ -164,7 +164,9 @@ public class BankAccountTest extends BaseTest {
                 .statusCode( 400 );
 
         //test that count didn't increase
-
+        collection = database.getCollection( "school_bank_account" );
+        long afterNegativeCreationCount = collection.countDocuments();
+        Assert.assertEquals( afterNegativeCreationCount, afterCreationCount );
 
         // deleting entity
         given()
@@ -176,6 +178,9 @@ public class BankAccountTest extends BaseTest {
                 .log().body()
                 .statusCode( 200 )
         ;
+
+        // test that count decrease by 1
+
     }
 
     @Test
