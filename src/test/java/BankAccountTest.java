@@ -1,14 +1,15 @@
-import com.mongodb.DBRef;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import io.restassured.http.ContentType;
+import model.BankAccount;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import utilities.BaseTest;
 
 import static com.mongodb.client.model.Filters.eq;
 import static io.restassured.RestAssured.given;
