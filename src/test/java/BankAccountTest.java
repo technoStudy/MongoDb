@@ -10,6 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import static com.mongodb.client.model.Filters.eq;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -131,7 +132,7 @@ public class BankAccountTest extends BaseTest {
         BankAccount entity = getBody();
         // get the document count
         MongoCollection<Document> collection = database.getCollection( "school_bank_account" );
-        long initialCount = collection.countDocuments();
+        long initialCount = collection.countDocuments(eq("deleted", false));
         // creating entity
         String entityId = given()
                 .cookies( cookies )
@@ -146,7 +147,7 @@ public class BankAccountTest extends BaseTest {
                 .extract().jsonPath().getString( "id" );
         // get the document count again
         collection = database.getCollection( "school_bank_account" );
-        long afterCreationCount = collection.countDocuments();
+        long afterCreationCount = collection.countDocuments(eq("deleted", false));
         // compare that the document count increased by 1
         Assert.assertEquals( afterCreationCount - 1, initialCount );
         Assert.assertEquals( initialCount + 1 ,  afterCreationCount);
@@ -165,7 +166,7 @@ public class BankAccountTest extends BaseTest {
 
         //test that count didn't increase
         collection = database.getCollection( "school_bank_account" );
-        long afterNegativeCreationCount = collection.countDocuments();
+        long afterNegativeCreationCount = collection.countDocuments(eq("deleted", false));
         Assert.assertEquals( afterNegativeCreationCount, afterCreationCount );
 
         // deleting entity
@@ -180,6 +181,9 @@ public class BankAccountTest extends BaseTest {
         ;
 
         // test that count decrease by 1
+        collection = database.getCollection( "school_bank_account" );
+        long afterDeletionCount = collection.countDocuments(eq("deleted", false));
+        Assert.assertEquals( afterDeletionCount, afterCreationCount - 1 );
 
     }
 
