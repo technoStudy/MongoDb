@@ -146,7 +146,6 @@ public class BankAccountTest extends BaseTest {
                 .statusCode( 201 )
                 .extract().jsonPath().getString( "id" );
         // get the document count again
-        collection = database.getCollection( "school_bank_account" );
         long afterCreationCount = collection.countDocuments(eq("deleted", false));
         // compare that the document count increased by 1
         Assert.assertEquals( afterCreationCount - 1, initialCount );
@@ -165,7 +164,6 @@ public class BankAccountTest extends BaseTest {
                 .statusCode( 400 );
 
         //test that count didn't increase
-        collection = database.getCollection( "school_bank_account" );
         long afterNegativeCreationCount = collection.countDocuments(eq("deleted", false));
         Assert.assertEquals( afterNegativeCreationCount, afterCreationCount );
 
@@ -181,7 +179,6 @@ public class BankAccountTest extends BaseTest {
         ;
 
         // test that count decrease by 1
-        collection = database.getCollection( "school_bank_account" );
         long afterDeletionCount = collection.countDocuments(eq("deleted", false));
         Assert.assertEquals( afterDeletionCount, afterCreationCount - 1 );
 
