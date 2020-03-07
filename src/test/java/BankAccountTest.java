@@ -201,7 +201,7 @@ public class BankAccountTest extends BaseTest {
                 .statusCode( 201 )
                 .extract().jsonPath().getString( "id" );
 
-        //get count to test deletion
+        //TODO: get count to test deletion
 
         // deleting entity
         given()
@@ -214,7 +214,7 @@ public class BankAccountTest extends BaseTest {
                 .statusCode( 200 )
         ;
 
-        // test that it was deleted
+        //TODO:  test that it was deleted
 
         // deleting entity again
         given()
@@ -227,7 +227,7 @@ public class BankAccountTest extends BaseTest {
                 .statusCode( 404 )
         ;
 
-        // test that the count didn't change
+        //TODO:  test that the count didn't change
     }
 
     private Document getEntityById(String entityId) {
