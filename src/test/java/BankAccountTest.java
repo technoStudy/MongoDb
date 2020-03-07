@@ -203,7 +203,8 @@ public class BankAccountTest extends BaseTest {
                 .extract().jsonPath().getString( "id" );
 
         //TODO: get count to test deletion
-
+        MongoCollection<Document> collection = database.getCollection( "school_bank_account" );
+        long initialCount = collection.countDocuments(eq("deleted", false));
         // deleting entity
         given()
                 .cookies( cookies )
@@ -216,6 +217,8 @@ public class BankAccountTest extends BaseTest {
         ;
 
         //TODO:  test that it was deleted
+        long afterDeletionCount = collection.countDocuments(eq("deleted", false));
+        Assert.assertEquals( afterDeletionCount, initialCount - 1 );
 
         // deleting entity again
         given()
@@ -225,10 +228,12 @@ public class BankAccountTest extends BaseTest {
                 .delete( apiPath + "/" + entityId )
                 .then()
                 .log().body()
-                .statusCode( 404 )
+                .statusCode( 200 )
         ;
 
         //TODO:  test that the count didn't change
+        long afterDeletionNegativeCount = collection.countDocuments(eq("deleted", false));
+        Assert.assertEquals( afterDeletionNegativeCount, afterDeletionCount );
     }
 
     private Document getEntityById(String entityId) {
