@@ -32,13 +32,14 @@ public class CountryTest extends BaseTest {
         ;
     }
 
+    // TODO: initialize database get reference to collection
 
     @Test
     public void createCountry() {
         Country country = new Country();
         country.setName( name );
         country.setCode( code );
-
+        // TODO: get the initial count
         // creating country
         String countryId = given()
                 .cookies( cookies )
@@ -51,6 +52,8 @@ public class CountryTest extends BaseTest {
                 .log().body()
                 .statusCode( 201 )
                 .extract().jsonPath().getString( "id" );
+        // TODO: verify that initial count increased
+        // TODO: verify that entity created with correct fields
 
         // deleting country
         given()
@@ -62,6 +65,9 @@ public class CountryTest extends BaseTest {
                 .log().body()
                 .statusCode( 200 )
         ;
+
+        // TODO: verify that count decreased
+        // TODO: verify that entity deleted, cannot be found
     }
 
     @Test
