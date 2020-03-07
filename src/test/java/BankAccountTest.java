@@ -129,7 +129,9 @@ public class BankAccountTest extends BaseTest {
     @Test
     public void createNegativeTest() {
         BankAccount entity = getBody();
-
+        // get the document count
+        MongoCollection<Document> collection = database.getCollection( "school_bank_account" );
+        long initialCount = collection.countDocuments();
         // creating entity
         String entityId = given()
                 .cookies( cookies )
@@ -142,6 +144,12 @@ public class BankAccountTest extends BaseTest {
                 .log().body()
                 .statusCode( 201 )
                 .extract().jsonPath().getString( "id" );
+        // get the document count again
+        collection = database.getCollection( "school_bank_account" );
+        long afterCreationCount = collection.countDocuments();
+        // compare that the document count increased by 1
+        Assert.assertEquals( afterCreationCount - 1, initialCount );
+        Assert.assertEquals( initialCount + 1 ,  afterCreationCount);
 
         // entity creation negative test
         given()
@@ -154,6 +162,9 @@ public class BankAccountTest extends BaseTest {
                 .then()
                 .log().body()
                 .statusCode( 400 );
+
+        //test that count didn't increase
+
 
         // deleting entity
         given()
